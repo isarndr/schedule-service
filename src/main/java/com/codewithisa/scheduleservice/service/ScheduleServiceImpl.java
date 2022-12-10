@@ -33,5 +33,11 @@ public class ScheduleServiceImpl implements ScheduleService{
         log.info("Inside findSchedulesByFilmCode of ScheduleServiceImpl");
         return scheduleRepository.findSchedulesByFilmCode(filmCode);
     }
+
+    @Override
+    public void deleteScheduleByScheduleId(Long scheduleId) {
+        log.info("Inside deleteScheduleByScheduleId of ScheduleServiceImpl");
+        scheduleRepository.deleteScheduleByScheduleId(scheduleId);
+    }
 }
 

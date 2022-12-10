@@ -12,5 +12,6 @@ public interface ScheduleService {
     Schedules findScheduleByScheduleId(Long scheduleId);
 
     List<Schedules> findSchedulesByFilmCode(Long filmCode);
+    void deleteScheduleByScheduleId(Long scheduleId);
 }
 

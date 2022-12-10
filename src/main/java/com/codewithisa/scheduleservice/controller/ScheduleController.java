@@ -28,7 +28,8 @@ public class ScheduleController {
 
     @Operation(summary = "untuk mendapatkan schedule berdasarkan schedule id")
     @GetMapping("/{scheduleId}")
-    public ResponseEntity<Schedules> findScheduleByScheduleId(@Schema(example = "Nemo") @PathVariable("scheduleId") Long scheduleId){
+    public ResponseEntity<Schedules> findScheduleByScheduleId(
+            @Schema(example = "Nemo") @PathVariable("scheduleId") Long scheduleId) {
         log.info("Inside findScheduleByScheduleId of ScheduleController");
         return new ResponseEntity<>(scheduleService.findScheduleByScheduleId(scheduleId), HttpStatus.OK);
     }
@@ -38,5 +39,12 @@ public class ScheduleController {
                                                                    @PathVariable("filmCode") Long filmCode){
         log.info("Inside findScheduleByScheduleId of ScheduleController");
         return new ResponseEntity<>(scheduleService.findSchedulesByFilmCode(filmCode), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<String> deleteScheduleByScheduleId(@PathVariable("scheduleId") Long scheduleId){
+        log.info("Inside deleteScheduleByScheduleId of ScheduleController");
+        scheduleService.deleteScheduleByScheduleId(scheduleId);
+        return new ResponseEntity<>("Schedule deleted", HttpStatus.OK);
     }
 }
