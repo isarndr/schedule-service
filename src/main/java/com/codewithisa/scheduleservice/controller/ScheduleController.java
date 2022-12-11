@@ -20,35 +20,35 @@ public class ScheduleController {
     @Autowired
     ScheduleService scheduleService;
 
-    @PostMapping("/")
+    @PostMapping("/add-schedule")
     public ResponseEntity<Schedules> saveSchedule(@RequestBody Schedules schedule) {
         log.info("Inside saveSchedule of ScheduleController");
         return new ResponseEntity<>(scheduleService.saveSchedule(schedule), HttpStatus.CREATED);
     }
 
     @Operation(summary = "untuk mendapatkan schedule berdasarkan schedule id")
-    @GetMapping("/{scheduleId}")
+    @GetMapping("/find-schedule-by-schedule-id/{scheduleId}")
     public ResponseEntity<Schedules> findScheduleByScheduleId(
             @Schema(example = "Nemo") @PathVariable("scheduleId") Long scheduleId) {
         log.info("Inside findScheduleByScheduleId of ScheduleController");
         return new ResponseEntity<>(scheduleService.findScheduleByScheduleId(scheduleId), HttpStatus.OK);
     }
 
-    @GetMapping("/schedules-by-film-code/{filmCode}")
+    @GetMapping("/find-schedules-by-film-code/{filmCode}")
     public ResponseEntity<List<Schedules>> findSchedulesByFilmCode(@Schema(example = "1")
                                                                    @PathVariable("filmCode") Long filmCode){
         log.info("Inside findScheduleByScheduleId of ScheduleController");
         return new ResponseEntity<>(scheduleService.findSchedulesByFilmCode(filmCode), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{scheduleId}")
+    @DeleteMapping("/delete-schedule-by-schedule-id/{scheduleId}")
     public ResponseEntity<String> deleteScheduleByScheduleId(@PathVariable("scheduleId") Long scheduleId){
         log.info("Inside deleteScheduleByScheduleId of ScheduleController");
         scheduleService.deleteScheduleByScheduleId(scheduleId);
         return new ResponseEntity<>("Schedule deleted", HttpStatus.OK);
     }
 
-    @GetMapping("/schedule-by-all/")
+    @GetMapping("/find-schedule-by-all/")
     public ResponseEntity<Schedules> findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
             @RequestParam("jamMulai") String jamMulai,
             @RequestParam("studioName") Character studioName,
