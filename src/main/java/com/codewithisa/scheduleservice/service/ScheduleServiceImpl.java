@@ -63,7 +63,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     public List<Schedules> findSchedulesByFilmName(String filmName) {
         log.info("Inside findSchedulesByFilmName of ScheduleServiceImpl");
         Films film = restTemplate.getForObject(
-                "http://localhost:9002/films/find-film-by-film-name/"+filmName,
+                "https://film-service-production.up.railway.app/films/find-film-by-film-name/"+filmName,
                 Films.class
         );
         Long filmCode = film.getFilmCode();
