@@ -1,10 +1,12 @@
 package com.codewithisa.scheduleservice.service;
 
+import com.codewithisa.scheduleservice.VO.Films;
 import com.codewithisa.scheduleservice.entity.Schedules;
 import com.codewithisa.scheduleservice.repository.ScheduleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -14,6 +16,8 @@ import java.util.List;
 public class ScheduleServiceImpl implements ScheduleService{
     @Autowired
     ScheduleRepository scheduleRepository;
+    @Autowired
+    RestTemplate restTemplate;
 
     @Override
     public Schedules saveSchedule(Schedules schedules) {
@@ -53,6 +57,18 @@ public class ScheduleServiceImpl implements ScheduleService{
             throw new Exception("Schedules tidak ditemukan");
         }
         return schedules;
+    }
+
+    @Override
+    public List<Schedules> findSchedulesByFilmName(String filmName) {
+        log.info("Inside findSchedulesByFilmName of ScheduleServiceImpl");
+        Films film = restTemplate.getForObject(
+                "http://localhost:9002/films/find-film-by-film-name/"+filmName,
+                Films.class
+        );
+        Long filmCode = film.getFilmCode();
+        List<Schedules> schedulesList= scheduleRepository.findSchedulesByFilmCode(filmCode);
+        return schedulesList;
     }
 }
 

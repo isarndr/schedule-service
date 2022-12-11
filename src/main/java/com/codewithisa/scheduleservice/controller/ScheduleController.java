@@ -66,4 +66,11 @@ public class ScheduleController {
         log.info(schedule.getJamMulai());
         return new ResponseEntity<>(schedule, HttpStatus.OK);
     }
+
+    @GetMapping("/find-schedules-by-film-name/{filmName}")
+    public ResponseEntity<List<Schedules>> findSchedulesByFilmName(@Schema(example = "Nemo")
+                                                                   @PathVariable("filmName") String filmName){
+        log.info("Inside findSchedulesByFilmName of ScheduleController");
+        return new ResponseEntity<>(scheduleService.findSchedulesByFilmName(filmName), HttpStatus.OK);
+    }
 }

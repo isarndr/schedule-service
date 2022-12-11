@@ -20,5 +20,6 @@ public interface ScheduleService {
             String tanggalTayang,
             Long filmCode
     ) throws Exception;
+    List<Schedules> findSchedulesByFilmName(String filmName);
 }
 
