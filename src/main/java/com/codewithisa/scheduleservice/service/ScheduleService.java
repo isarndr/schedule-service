@@ -13,5 +13,12 @@ public interface ScheduleService {
 
     List<Schedules> findSchedulesByFilmCode(Long filmCode);
     void deleteScheduleByScheduleId(Long scheduleId);
+
+    Schedules findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
+            String jamMulai,
+            Character studioName,
+            String tanggalTayang,
+            Long filmCode
+    ) throws Exception;
 }
 

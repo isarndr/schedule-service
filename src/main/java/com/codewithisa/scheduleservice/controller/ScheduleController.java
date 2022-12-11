@@ -47,4 +47,23 @@ public class ScheduleController {
         scheduleService.deleteScheduleByScheduleId(scheduleId);
         return new ResponseEntity<>("Schedule deleted", HttpStatus.OK);
     }
+
+    @GetMapping("/schedule-by-all/")
+    public ResponseEntity<Schedules> findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
+            @RequestParam("jamMulai") String jamMulai,
+            @RequestParam("studioName") Character studioName,
+            @RequestParam("tanggalTayang") String tanggalTayang,
+            @RequestParam("filmCode") Long filmCode){
+        log.info("Inside findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode of ScheduleController");
+        Schedules schedule = null;
+        try {
+            schedule = scheduleService.findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
+                    jamMulai,studioName,tanggalTayang,filmCode
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        log.info(schedule.getJamMulai());
+        return new ResponseEntity<>(schedule, HttpStatus.OK);
+    }
 }

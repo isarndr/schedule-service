@@ -31,5 +31,17 @@ public interface ScheduleRepository extends JpaRepository<Schedules, Long> {
             value = "delete from schedules where schedule_id = :scheduleId"
     )
     void deleteScheduleByScheduleId(@Param("scheduleId") Long scheduleId);
+
+    @Query(
+            nativeQuery = true,
+            value = "select * from schedules " +
+                    "where jam_mulai=:jamMulai and studio_name=:studioName and tanggal_tayang=:tanggalTayang and " +
+                    "film_code=:filmCode")
+    Schedules findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
+            @Param("jamMulai") String jamMulai,
+            @Param("studioName") Character studioName,
+            @Param("tanggalTayang") String tanggalTayang,
+            @Param("filmCode") Long filmCode
+    );
 }
 

@@ -39,5 +39,20 @@ public class ScheduleServiceImpl implements ScheduleService{
         log.info("Inside deleteScheduleByScheduleId of ScheduleServiceImpl");
         scheduleRepository.deleteScheduleByScheduleId(scheduleId);
     }
+
+    @Override
+    public Schedules findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
+            String jamMulai, Character studioName, String tanggalTayang, Long filmCode
+    ) throws Exception{
+        log.info("Inside findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode of ScheduleServiceImpl");
+        Schedules schedules = scheduleRepository.findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
+                jamMulai, studioName,tanggalTayang,filmCode
+        );
+        if(schedules.equals(null)){
+            log.error("schedule is not found");
+            throw new Exception("Schedules tidak ditemukan");
+        }
+        return schedules;
+    }
 }
 
