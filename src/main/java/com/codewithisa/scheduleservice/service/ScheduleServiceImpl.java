@@ -60,15 +60,31 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public List<Schedules> findSchedulesByFilmName(String filmName) {
+    public List<Schedules> findSchedulesByFilmName(String filmName) throws Exception{
         log.info("Inside findSchedulesByFilmName of ScheduleServiceImpl");
         Films film = restTemplate.getForObject(
                 "https://film-service-production.up.railway.app/films/find-film-by-film-name/"+filmName,
                 Films.class
         );
+        if(film==null){
+            log.error("film name is not in the database");
+            throw new Exception("film name is not in the database");
+        }
         Long filmCode = film.getFilmCode();
         List<Schedules> schedulesList= scheduleRepository.findSchedulesByFilmCode(filmCode);
         return schedulesList;
+    }
+
+    @Override
+    public Boolean existsByFilmCode(Long filmCode) {
+        log.info("Inside existsByFilmCode of ScheduleServiceImpl");
+        return scheduleRepository.existsByFilmCode(filmCode);
+    }
+
+    @Override
+    public Boolean existsByScheduleId(Long scheduleId) {
+        log.info("Inside existsByScheduleId of ScheduleServiceImpl");
+        return scheduleRepository.existsById(scheduleId);
     }
 }
 

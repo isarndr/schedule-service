@@ -43,5 +43,7 @@ public interface ScheduleRepository extends JpaRepository<Schedules, Long> {
             @Param("tanggalTayang") String tanggalTayang,
             @Param("filmCode") Long filmCode
     );
+
+    Boolean existsByFilmCode(Long filmCode);
 }
 

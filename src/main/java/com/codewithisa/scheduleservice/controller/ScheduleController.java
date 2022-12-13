@@ -31,6 +31,11 @@ public class ScheduleController {
     public ResponseEntity<Schedules> findScheduleByScheduleId(
             @Schema(example = "Nemo") @PathVariable("scheduleId") Long scheduleId) {
         log.info("Inside findScheduleByScheduleId of ScheduleController");
+        Boolean existByScheduleId=scheduleService.existsByScheduleId(scheduleId);
+        if(!existByScheduleId){
+            log.error("schedule id is not in the database");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(scheduleService.findScheduleByScheduleId(scheduleId), HttpStatus.OK);
     }
 
@@ -38,12 +43,22 @@ public class ScheduleController {
     public ResponseEntity<List<Schedules>> findSchedulesByFilmCode(@Schema(example = "1")
                                                                    @PathVariable("filmCode") Long filmCode){
         log.info("Inside findScheduleByScheduleId of ScheduleController");
+        Boolean existByFilmCode=scheduleService.existsByFilmCode(filmCode);
+        if(!existByFilmCode){
+            log.error("film code is not in the database");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(scheduleService.findSchedulesByFilmCode(filmCode), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete-schedule-by-schedule-id/{scheduleId}")
     public ResponseEntity<String> deleteScheduleByScheduleId(@PathVariable("scheduleId") Long scheduleId){
         log.info("Inside deleteScheduleByScheduleId of ScheduleController");
+        Boolean existByScheduleId=scheduleService.existsByScheduleId(scheduleId);
+        if(!existByScheduleId){
+            log.error("schedule id is not in the database");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         scheduleService.deleteScheduleByScheduleId(scheduleId);
         return new ResponseEntity<>("Schedule deleted", HttpStatus.OK);
     }
@@ -55,6 +70,11 @@ public class ScheduleController {
             @RequestParam("tanggalTayang") String tanggalTayang,
             @RequestParam("filmCode") Long filmCode){
         log.info("Inside findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode of ScheduleController");
+        Boolean existByFilmCode=scheduleService.existsByFilmCode(filmCode);
+        if(!existByFilmCode){
+            log.error("film code is not in the database");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         Schedules schedule = null;
         try {
             schedule = scheduleService.findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
@@ -71,6 +91,12 @@ public class ScheduleController {
     public ResponseEntity<List<Schedules>> findSchedulesByFilmName(@Schema(example = "Nemo")
                                                                    @PathVariable("filmName") String filmName){
         log.info("Inside findSchedulesByFilmName of ScheduleController");
-        return new ResponseEntity<>(scheduleService.findSchedulesByFilmName(filmName), HttpStatus.OK);
+        try {
+            List<Schedules> schedulesList = scheduleService.findSchedulesByFilmName(filmName);
+            return new ResponseEntity<>(schedulesList, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("film name is not in the database");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

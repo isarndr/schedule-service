@@ -20,6 +20,8 @@ public interface ScheduleService {
             String tanggalTayang,
             Long filmCode
     ) throws Exception;
-    List<Schedules> findSchedulesByFilmName(String filmName);
+    List<Schedules> findSchedulesByFilmName(String filmName) throws Exception;
+    Boolean existsByFilmCode(Long filmCode);
+    Boolean existsByScheduleId(Long scheduleId);
 }
 
