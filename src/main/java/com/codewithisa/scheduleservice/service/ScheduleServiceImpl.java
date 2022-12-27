@@ -5,6 +5,7 @@ import com.codewithisa.scheduleservice.entity.Schedule;
 import com.codewithisa.scheduleservice.repository.ScheduleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,10 +15,14 @@ import java.util.List;
 @Slf4j
 @Service
 public class ScheduleServiceImpl implements ScheduleService{
+
     @Autowired
     ScheduleRepository scheduleRepository;
     @Autowired
     RestTemplate restTemplate;
+
+    @Value("${filmByFilmName}")
+    private String filmByFilmName;
 
     @Override
     public Schedule saveSchedule(Schedule schedule) {
@@ -88,7 +93,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public List<Schedule> findSchedulesByFilmName(String filmName) throws Exception{
         Film film = restTemplate.getForObject(
-                "http://localhost:9002/film/by-film-name/"+filmName,
+                filmByFilmName+filmName,
                 Film.class
         );
         if(film==null){
