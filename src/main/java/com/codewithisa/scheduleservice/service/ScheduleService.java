@@ -9,10 +9,10 @@ import java.util.List;
 @Service
 public interface ScheduleService {
     Schedules saveSchedule(Schedules schedules);
-    Schedules findScheduleByScheduleId(Long scheduleId);
+    Schedules findScheduleByScheduleId(Long scheduleId) throws Exception;
 
-    List<Schedules> findSchedulesByFilmCode(Long filmCode);
-    void deleteScheduleByScheduleId(Long scheduleId);
+    List<Schedules> findSchedulesByFilmCode(Long filmCode) throws Exception;
+    void deleteScheduleByScheduleId(Long scheduleId) throws Exception;
 
     Schedules findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
             String jamMulai,

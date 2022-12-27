@@ -5,6 +5,8 @@ import com.codewithisa.scheduleservice.entity.Schedules;
 import com.codewithisa.scheduleservice.repository.ScheduleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,26 +23,45 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public Schedules saveSchedule(Schedules schedules) {
-        log.info("Inside saveSchedule of ScheduleServiceImpl");
         scheduleRepository.save(schedules);
         return schedules;
     }
 
     @Override
-    public Schedules findScheduleByScheduleId(Long scheduleId) {
-        log.info("Inside findScheduleByScheduleId of ScheduleServiceImpl");
+    public Schedules findScheduleByScheduleId(Long scheduleId) throws Exception{
+        Boolean existByScheduleId = existsByScheduleId(scheduleId);
+
+        if(!existByScheduleId){
+            log.error("schedule id is not in the database");
+            throw new Exception("schedule id is not in the database");
+        }
+
         return scheduleRepository.findScheduleByScheduleId(scheduleId);
     }
 
     @Override
-    public List<Schedules> findSchedulesByFilmCode(Long filmCode) {
-        log.info("Inside findSchedulesByFilmCode of ScheduleServiceImpl");
+    public List<Schedules> findSchedulesByFilmCode(Long filmCode) throws Exception{
+
+        Boolean existByFilmCode = existsByFilmCode(filmCode);
+
+        if(!existByFilmCode){
+            log.error("film code is not in the database");
+            throw new Exception("film code is not in the database");
+        }
+
         return scheduleRepository.findSchedulesByFilmCode(filmCode);
     }
 
     @Override
-    public void deleteScheduleByScheduleId(Long scheduleId) {
-        log.info("Inside deleteScheduleByScheduleId of ScheduleServiceImpl");
+    public void deleteScheduleByScheduleId(Long scheduleId) throws Exception{
+
+        Boolean existByScheduleId = existsByScheduleId(scheduleId);
+
+        if(!existByScheduleId){
+            log.error("schedule id is not in the database");
+            throw new Exception("schedule id is not in the database");
+        }
+
         scheduleRepository.deleteScheduleByScheduleId(scheduleId);
     }
 
@@ -48,7 +69,13 @@ public class ScheduleServiceImpl implements ScheduleService{
     public Schedules findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
             String jamMulai, Character studioName, String tanggalTayang, Long filmCode
     ) throws Exception{
-        log.info("Inside findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode of ScheduleServiceImpl");
+
+        Boolean existByFilmCode = existsByFilmCode(filmCode);
+        if(!existByFilmCode){
+            log.error("film code is not in the database");
+            throw new Exception("film code is not in the database");
+        }
+
         Schedules schedules = scheduleRepository.findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
                 jamMulai, studioName,tanggalTayang,filmCode
         );
@@ -61,9 +88,8 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public List<Schedules> findSchedulesByFilmName(String filmName) throws Exception{
-        log.info("Inside findSchedulesByFilmName of ScheduleServiceImpl");
         Films film = restTemplate.getForObject(
-                "https://film-service-production.up.railway.app/films/find-film-by-film-name/"+filmName,
+                "http://localhost:9002/film/by-film-name/"+filmName,
                 Films.class
         );
         if(film==null){
@@ -77,13 +103,11 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public Boolean existsByFilmCode(Long filmCode) {
-        log.info("Inside existsByFilmCode of ScheduleServiceImpl");
         return scheduleRepository.existsByFilmCode(filmCode);
     }
 
     @Override
     public Boolean existsByScheduleId(Long scheduleId) {
-        log.info("Inside existsByScheduleId of ScheduleServiceImpl");
         return scheduleRepository.existsById(scheduleId);
     }
 }
