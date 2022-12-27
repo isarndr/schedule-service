@@ -1,6 +1,6 @@
 package com.codewithisa.scheduleservice.repository;
 
-import com.codewithisa.scheduleservice.entity.Schedules;
+import com.codewithisa.scheduleservice.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,18 +11,18 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public interface ScheduleRepository extends JpaRepository<Schedules, Long> {
+public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     @Query(
             nativeQuery = true,
             value = "select * from schedules where schedule_id=:scheduleId"
     )
-    Schedules findScheduleByScheduleId(@Param("scheduleId") Long scheduleId);
+    Schedule findScheduleByScheduleId(@Param("scheduleId") Long scheduleId);
 
     @Query(
             nativeQuery = true,
             value = "select * from schedules where film_code=:film_code"
     )
-    List<Schedules> findSchedulesByFilmCode(@Param("film_code") Long film_code);
+    List<Schedule> findSchedulesByFilmCode(@Param("film_code") Long film_code);
 
     @Transactional
     @Modifying
@@ -37,7 +37,7 @@ public interface ScheduleRepository extends JpaRepository<Schedules, Long> {
             value = "select * from schedules " +
                     "where jam_mulai=:jamMulai and studio_name=:studioName and tanggal_tayang=:tanggalTayang and " +
                     "film_code=:filmCode")
-    Schedules findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
+    Schedule findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
             @Param("jamMulai") String jamMulai,
             @Param("studioName") Character studioName,
             @Param("tanggalTayang") String tanggalTayang,

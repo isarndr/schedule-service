@@ -1,6 +1,6 @@
 package com.codewithisa.scheduleservice.controller;
 
-import com.codewithisa.scheduleservice.entity.Schedules;
+import com.codewithisa.scheduleservice.entity.Schedule;
 import com.codewithisa.scheduleservice.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,7 +22,7 @@ public class ScheduleController {
     ScheduleService scheduleService;
 
     @PostMapping("/")
-    public ResponseEntity<Schedules> saveSchedule(@RequestBody Schedules schedule) {
+    public ResponseEntity<Schedule> saveSchedule(@RequestBody Schedule schedule) {
         return new ResponseEntity<>(scheduleService.saveSchedule(schedule), HttpStatus.CREATED);
     }
 
@@ -64,7 +64,7 @@ public class ScheduleController {
             @RequestParam("tanggalTayang") String tanggalTayang,
             @RequestParam("filmCode") Long filmCode){
 
-        Schedules schedule = null;
+        Schedule schedule = null;
 
         try {
             schedule = scheduleService.findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
@@ -78,12 +78,12 @@ public class ScheduleController {
     }
 
     @GetMapping("/by-film-name/{filmName}")
-    public ResponseEntity<List<Schedules>> findSchedulesByFilmName(@Schema(example = "Nemo")
+    public ResponseEntity<List<Schedule>> findSchedulesByFilmName(@Schema(example = "Nemo")
                                                                    @PathVariable("filmName") String filmName){
 
         try {
-            List<Schedules> schedulesList = scheduleService.findSchedulesByFilmName(filmName);
-            return new ResponseEntity<>(schedulesList, HttpStatus.OK);
+            List<Schedule> scheduleList = scheduleService.findSchedulesByFilmName(filmName);
+            return new ResponseEntity<>(scheduleList, HttpStatus.OK);
         } catch (Exception e) {
             log.error("film name is not in the database");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -1,12 +1,10 @@
 package com.codewithisa.scheduleservice.service;
 
-import com.codewithisa.scheduleservice.VO.Films;
-import com.codewithisa.scheduleservice.entity.Schedules;
+import com.codewithisa.scheduleservice.VO.Film;
+import com.codewithisa.scheduleservice.entity.Schedule;
 import com.codewithisa.scheduleservice.repository.ScheduleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,13 +20,14 @@ public class ScheduleServiceImpl implements ScheduleService{
     RestTemplate restTemplate;
 
     @Override
-    public Schedules saveSchedule(Schedules schedules) {
-        scheduleRepository.save(schedules);
-        return schedules;
+    public Schedule saveSchedule(Schedule schedule) {
+        scheduleRepository.save(schedule);
+        log.info("Schedule saved");
+        return schedule;
     }
 
     @Override
-    public Schedules findScheduleByScheduleId(Long scheduleId) throws Exception{
+    public Schedule findScheduleByScheduleId(Long scheduleId) throws Exception{
         Boolean existByScheduleId = existsByScheduleId(scheduleId);
 
         if(!existByScheduleId){
@@ -40,7 +39,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public List<Schedules> findSchedulesByFilmCode(Long filmCode) throws Exception{
+    public List<Schedule> findSchedulesByFilmCode(Long filmCode) throws Exception{
 
         Boolean existByFilmCode = existsByFilmCode(filmCode);
 
@@ -66,7 +65,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public Schedules findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
+    public Schedule findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
             String jamMulai, Character studioName, String tanggalTayang, Long filmCode
     ) throws Exception{
 
@@ -76,29 +75,29 @@ public class ScheduleServiceImpl implements ScheduleService{
             throw new Exception("film code is not in the database");
         }
 
-        Schedules schedules = scheduleRepository.findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
+        Schedule schedule = scheduleRepository.findScheduleByJamMulaiAndStudioNameAndTanggalTayangAndFilmCode(
                 jamMulai, studioName,tanggalTayang,filmCode
         );
-        if(schedules.equals(null)){
+        if(schedule.equals(null)){
             log.error("schedule is not found");
-            throw new Exception("Schedules tidak ditemukan");
+            throw new Exception("Schedule tidak ditemukan");
         }
-        return schedules;
+        return schedule;
     }
 
     @Override
-    public List<Schedules> findSchedulesByFilmName(String filmName) throws Exception{
-        Films film = restTemplate.getForObject(
+    public List<Schedule> findSchedulesByFilmName(String filmName) throws Exception{
+        Film film = restTemplate.getForObject(
                 "http://localhost:9002/film/by-film-name/"+filmName,
-                Films.class
+                Film.class
         );
         if(film==null){
             log.error("film name is not in the database");
             throw new Exception("film name is not in the database");
         }
         Long filmCode = film.getFilmCode();
-        List<Schedules> schedulesList= scheduleRepository.findSchedulesByFilmCode(filmCode);
-        return schedulesList;
+        List<Schedule> scheduleList = scheduleRepository.findSchedulesByFilmCode(filmCode);
+        return scheduleList;
     }
 
     @Override
